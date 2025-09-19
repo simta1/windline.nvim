@@ -38,15 +38,25 @@ local cava_comp = {
         cava8 = { "cava8", "wavedefault" },
     },
     text = function()
+        local temp = {}
         for i = 1, 30, 1 do
             local index = i * 2 - 1
             local c = tonumber(cava_text:sub(index, index))
             if c then
                 c = c + 1
-                result[i] = { bars[c], "cava" .. c }
+                temp[i] = { bars[c], "cava" .. c }
             end
         end
-        -- result[#result+1] = {"%="}
+
+        local win_width = vim.fn.winwidth(0)
+        local cnt = math.floor(win_width - 95)
+        cnt = math.max(cnt, 6)
+        result = {}
+
+        local tlen = #temp
+        for i = 1, cnt do
+            result[i] = temp[((i - 1) % tlen) + 1]
+        end
         return result
     end,
     click = function()
